@@ -12,16 +12,16 @@ npm test          # unit tests, no dependencies to install
 npm start         # http://localhost:3000
 ```
 
-No `npm install` is needed (zero dependencies, Node 20+). Live research needs a key:
+No `npm install` is needed (zero dependencies, Node 20+). Live research needs a **free** Gemini key (create one at https://aistudio.google.com/apikey; no paid account needed):
 
 ```bash
-cp .env.example .env     # then set ANTHROPIC_API_KEY
+cp .env.example .env     # then set GEMINI_API_KEY
 ```
 
 Without a key the app still runs. Library guides work; unknown apps return a guide clearly marked **STUB / not researched** instead of made-up content.
 
 ### Deploy (Vercel)
-Import the repo, set `ANTHROPIC_API_KEY` (and optionally `ANTHROPIC_MODEL`) in the project's environment variables, deploy. `vercel.json` sets a 300s function limit because live research is slow; check your plan's maximum.
+Import the repo, set `GEMINI_API_KEY` (and optionally `GEMINI_MODEL`) in the project's environment variables, deploy. `vercel.json` sets a 300s function limit because live research is slow; check your plan's maximum.
 
 ## Key decisions
 
@@ -31,7 +31,7 @@ Import the repo, set `ANTHROPIC_API_KEY` (and optionally `ANTHROPIC_MODEL`) in t
 4. **Stateless sharing.** A generated guide is encoded into the URL fragment (`/guide#g=...`), so it can be shared without a database. Curated guides live at `/guide?slug=...`.
 5. **Library first.** A query matching a curated guide (by name or domain) returns it instead of spending a generation.
 6. **Untrusted output boundary.** Agent output goes through `normalizeGuide()` (enum-clamped fields, http(s)-only URLs, length limits) and the UI renders with `textContent` only, so a hostile guide or share link cannot inject markup.
-7. **Zero dependencies.** One `fetch` to the Anthropic Messages API with the web search tool. Easy to audit and deploy.
+7. **Zero dependencies.** One `fetch` to the Gemini API (free tier) with Google Search grounding; Anthropic is supported as an optional alternative if `GEMINI_API_KEY` is unset. Easy to audit and deploy.
 
 ## Evidence and limits (read this)
 
@@ -43,7 +43,7 @@ See [VERIFICATION.md](VERIFICATION.md) for exactly what was checked, corrected a
 - Generated guides are not human reviewed. Search-based research can pick up stale or third-party pages; use the source links.
 - The live generator is rate limited in-memory per IP (best effort on serverless) and is the only part that spends API credit.
 - Only 5 of the target 100 guides exist, by design of this take-home.
-- This build was not run against a live API key in my environment, so the Anthropic request path is unit-tested for parsing and normalization but **not yet exercised end to end**. Do a first live run before relying on it.
+- This build was not run against a live API key in my environment, so the Gemini/Anthropic request paths are unit-tested for parsing and normalization but **not yet exercised end to end**. Do a first live run before relying on it.
 
 ## Layout
 

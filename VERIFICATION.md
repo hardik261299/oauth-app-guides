@@ -25,7 +25,7 @@ Date: 2026-10-27. Method: fetched each provider's primary developer documentatio
 
 - Real approval durations for any provider (providers largely do not publish them).
 - Any behaviour that requires a signed-in console: exact UI labels, plan restrictions, fees.
-- The live agent path against the Anthropic API (no key available during development). Parsing, normalization and the stub path are covered by tests.
+- The live agent path against the Gemini/Anthropic APIs (no key available during development). Parsing, normalization and the stub path are covered by tests.
 
 ## Suggested next verification step
 

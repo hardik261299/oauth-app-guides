@@ -19,7 +19,7 @@ export default async function handler(req, res) {
   const existing = await findGuide(query);
   if (existing) return send(res, 200, { guide: existing, source: 'library' });
 
-  if (providerName() === 'anthropic' && rateLimited(req)) {
+  if (providerName() !== 'stub' && rateLimited(req)) {
     return send(res, 429, { error: 'Generation limit reached for now. Try again later.' });
   }
 
