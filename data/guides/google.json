@@ -17,8 +17,9 @@
     { "text": "Request only the narrowest scopes needed, with a detailed justification.", "confidence": "confirmed", "source": "https://support.google.com/cloud/answer/13464321" },
     { "text": "Sensitive/restricted scopes need a demo video showing the end-to-end flow including the OAuth grant.", "confidence": "confirmed", "source": "https://support.google.com/cloud/answer/13464321" },
     { "text": "Restricted scopes require an annual security assessment by a Google-empanelled assessor, and annual re-verification.", "confidence": "confirmed", "source": "https://support.google.com/cloud/answer/13464321" },
-    { "text": "Unverified apps are capped at 100 users and show an 'unverified app' warning screen.", "confidence": "unconfirmed", "source": "" },
-    { "text": "In Testing publishing status, refresh tokens expire after 7 days.", "confidence": "unconfirmed", "source": "" }
+    { "text": "Before verification, scopes that need it show an 'Unverified app' warning, and there is a lifetime cap of 100 new users after the unverified screen is shown. The cap cannot be reset or changed (quotas may be adjusted for specific apps).", "confidence": "confirmed", "source": "https://support.google.com/cloud/answer/15549945" },
+    { "text": "A project in 'Testing' publishing status gets refresh tokens that expire in 7 days, unless scopes are limited to name, email and profile (or OpenID Connect equivalents).", "confidence": "confirmed", "source": "https://developers.google.com/identity/protocols/oauth2#expiration" },
+    { "text": "There is a limit of 100 refresh tokens per Google Account per OAuth client ID; the oldest is invalidated without warning when exceeded. Service accounts are exempt.", "confidence": "confirmed", "source": "https://developers.google.com/identity/protocols/oauth2#expiration" }
   ],
   "steps": [
     { "title": "Create a Google Cloud project and enable the APIs you need", "detail": "Use a project owned by the company, not a personal account.", "owner": "developer", "source": "" },
@@ -36,10 +37,12 @@
   ],
   "agentCan": ["Audit the requested scopes against sensitivity labels and suggest narrower alternatives.", "Draft the scope justification text, privacy policy skeleton and demo-video script."],
   "developerMust": ["Prove domain ownership and own the Cloud project.", "Record the demo video, submit verification and answer reviewer emails.", "Pay for and complete a security assessment if restricted scopes are required."],
-  "uncertain": ["Review turnaround time was not on the pages fetched.", "The 100-user cap and 7-day testing refresh-token expiry are from general knowledge and were not found on the fetched pages.", "Security assessment cost is not published on the pages checked."],
+  "uncertain": ["Review turnaround time was not on the pages fetched.", "Security assessment cost is not published on the pages checked."],
   "sources": [
+    { "title": "OAuth user quotas and unverified app screen - Google Cloud Help", "url": "https://support.google.com/cloud/answer/15549945" },
+    { "title": "Using OAuth 2.0 (token expiration) - Google for Developers", "url": "https://developers.google.com/identity/protocols/oauth2#expiration" },
     { "title": "OAuth app verification - Google Cloud Help", "url": "https://support.google.com/cloud/answer/13463073" },
     { "title": "Verification requirements - Google Cloud Help", "url": "https://support.google.com/cloud/answer/13464321" }
   ],
-  "meta": { "generatedBy": "curated", "researchedOn": "2026-10-27", "tested": "Read two primary help pages. No project or consent screen was created." }
+  "meta": { "generatedBy": "curated", "researchedOn": "2026-10-27", "tested": "Read four primary help pages (two re-checked in a second pass). No project or consent screen was created." }
 }

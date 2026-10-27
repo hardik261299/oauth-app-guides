@@ -7,10 +7,20 @@ Date: 2026-10-27. Method: fetched each provider's primary developer documentatio
 | Guide | Pages read | Claims tagged confirmed | Left unconfirmed |
 |---|---|---|---|
 | GitHub | 1 | 4 | client-secret handling, org third-party restrictions |
-| Slack | 1 (+1 that 404'd) | 6 | public-distribution toggle, Marketplace review time/requirements |
-| Google | 2 | 6 | 100-user cap, 7-day testing refresh-token expiry, review time, assessment cost |
+| Slack | 2 (+1 that 404'd) | 8 | Marketplace review time/requirements, app-creation UI steps |
+| Google | 4 | 9 | verification review time, assessment cost |
 | LinkedIn | 2 | 5 | Company Page requirement, approval timelines |
 | Notion | 1 | 5 | review duration/criteria, whether review blocks own-workspace testing |
+
+## Second pass (2026-10-28): unconfirmed claims resolved against sources
+
+Items first written as "general knowledge" were looked up and the guides updated:
+
+- **Google 100-user cap: confirmed, and stricter than I wrote.** It is a lifetime cap of 100 *new users* after the unverified-app screen is shown, "cannot be reset or changed" ([source](https://support.google.com/cloud/answer/15549945)). Guide now says so.
+- **Google 7-day testing refresh token: confirmed, with an exception I had missed.** It does not apply when scopes are limited to name, email and profile ([source](https://developers.google.com/identity/protocols/oauth2#expiration)).
+- **New finding: 100 refresh tokens per account per client ID**, oldest silently invalidated. Added to the guide; relevant to anyone re-authorizing in a loop.
+- **Slack public distribution: confirmed.** It is called *unlisted distribution*, is activated under Manage Distribution, and does **not** need Marketplace review; Marketplace listing is only recommended for commercial apps ([source](https://docs.slack.dev/distribution/)). This changes the Slack wait from "unknown" to "none for unlisted distribution". Admin approval per workspace was added as a blocker-type nuance.
+- **Still unresolved:** Google verification turnaround, Google security-assessment cost, Slack Marketplace review time/requirements (provider pages checked do not state them).
 
 ## Corrections and findings from checking
 
