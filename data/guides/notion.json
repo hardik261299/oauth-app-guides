@@ -1,0 +1,40 @@
+{
+  "slug": "notion",
+  "name": "Notion",
+  "website": "https://www.notion.so",
+  "summary": "Notion's OAuth uses a 'public connection' created in the developer portal. Its authorization URL only appears after the connection is submitted for review, so you cannot start the user flow until you pass that step. Each end user must authorize individually.",
+  "difficulty": "moderate",
+  "difficultyWhy": "The form is simple, but the authorization URL is gated on a review submission whose timing is not documented on the page checked. Installation scope is permanent.",
+  "time": { "handsOn": "~30-60 minutes", "wait": "Not published on the page checked", "waitConfidence": "unconfirmed" },
+  "approval": {
+    "required": "yes",
+    "details": "The Authorization URL field populates only after the connection is submitted for review. Marketplace listing details are managed separately under Listings."
+  },
+  "requirements": [
+    { "text": "Create a public connection in the Notion developer portal and configure one or more redirect URIs in the OAuth section.", "confidence": "confirmed", "source": "https://developers.notion.com/docs/authorization" },
+    { "text": "Choose installation scope: 'Any workspace' or 'Selected workspaces only'. This cannot be changed after creation.", "confidence": "confirmed", "source": "https://developers.notion.com/docs/authorization" },
+    { "text": "Token exchange: POST https://api.notion.com/v1/oauth/token with HTTP Basic auth (base64 CLIENT_ID:CLIENT_SECRET); body has grant_type=authorization_code, code and redirect_uri when required.", "confidence": "confirmed", "source": "https://developers.notion.com/docs/authorization" },
+    { "text": "The response includes access_token, refresh_token, bot_id, owner and workspace_id. Refresh by POSTing grant_type=refresh_token to the same endpoint; both tokens are replaced.", "confidence": "confirmed", "source": "https://developers.notion.com/docs/authorization" },
+    { "text": "Every user must complete the flow individually, and only the authorizing user can share pages with the connection.", "confidence": "confirmed", "source": "https://developers.notion.com/docs/authorization" },
+    { "text": "Submitting for review may require a public description, privacy policy and support contact.", "confidence": "unconfirmed", "source": "" }
+  ],
+  "steps": [
+    { "title": "Choose installation scope carefully", "detail": "Any workspace vs selected workspaces cannot be changed later; for a multi-customer product you almost certainly need 'Any workspace'.", "owner": "developer", "source": "https://developers.notion.com/docs/authorization" },
+    { "title": "Create the public connection in the developer portal", "detail": "Add connection details and redirect URIs.", "owner": "developer", "source": "https://developers.notion.com/docs/authorization" },
+    { "title": "Submit the connection for review", "detail": "This is what populates the Authorization URL. Start early because the wait is not documented.", "owner": "developer", "source": "https://developers.notion.com/docs/authorization" },
+    { "title": "Build the authorize link and callback", "detail": "Use https://api.notion.com/v1/oauth/authorize with client_id, redirect_uri, response_type=code, owner=user and state.", "owner": "agent", "source": "https://developers.notion.com/docs/authorization" },
+    { "title": "Exchange the code and persist the token set", "detail": "Store access_token, refresh_token and bot_id per authorization; store the new pair after each refresh.", "owner": "agent", "source": "https://developers.notion.com/docs/authorization" }
+  ],
+  "blockers": [
+    { "issue": "Authorization URL field is empty", "fix": "The connection has not been submitted for review yet. Submit it, then copy the URL once populated." },
+    { "issue": "Wrong installation scope picked", "fix": "It cannot be changed; create a new connection and migrate credentials." },
+    { "issue": "Users can connect but pages are not visible to your integration", "fix": "The authorizing user must share pages with the connection during the consent flow." }
+  ],
+  "agentCan": ["Implement authorize, callback, Basic-auth token exchange and refresh handling.", "Draft the connection description and review submission text."],
+  "developerMust": ["Create the connection and submit it for review while signed in to Notion.", "Respond to any review feedback from Notion."],
+  "uncertain": ["Review duration and criteria were not documented on the page fetched.", "Whether review is required before testing with your own workspace was not verified.", "This page was read through an automated summariser; spot-check field names in the portal UI."],
+  "sources": [
+    { "title": "Authorization - Notion Developers", "url": "https://developers.notion.com/docs/authorization" }
+  ],
+  "meta": { "generatedBy": "curated", "researchedOn": "2026-10-27", "tested": "Read the primary docs page. No connection was created." }
+}

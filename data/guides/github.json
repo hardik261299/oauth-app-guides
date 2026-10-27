@@ -1,0 +1,38 @@
+{
+  "slug": "github",
+  "name": "GitHub",
+  "website": "https://github.com",
+  "summary": "Registering a GitHub OAuth app is a form on your account settings and takes minutes. The docs list no review step. The real decision is whether to use an OAuth app or a GitHub App, which GitHub's docs recommend considering first.",
+  "difficulty": "easy",
+  "difficultyWhy": "Self-serve form, no documented review. The only complexity is choosing between an OAuth app and a GitHub App, and organization access policies.",
+  "time": { "handsOn": "~10 minutes", "wait": "None documented", "waitConfidence": "confirmed" },
+  "approval": {
+    "required": "no",
+    "details": "The registration page does not mention any review or approval process. Organizations may still restrict third-party OAuth apps (see blockers; unconfirmed)."
+  },
+  "requirements": [
+    { "text": "A GitHub account (personal or organization) that owns the app. One user or org can own up to 100 OAuth apps.", "confidence": "confirmed", "source": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app" },
+    { "text": "Application name, Homepage URL and Authorization callback URL. Up to 10 callback URLs are allowed.", "confidence": "confirmed", "source": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app" },
+    { "text": "Decide on 'Expire user access tokens' (on by default) and optional Device Flow.", "confidence": "confirmed", "source": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app" },
+    { "text": "OAuth apps can only act on behalf of a user; GitHub Apps can also act independently and use fine-grained permissions and short-lived tokens. GitHub recommends considering a GitHub App first.", "confidence": "confirmed", "source": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app" },
+    { "text": "A client secret is generated after registration and must be stored server-side.", "confidence": "unconfirmed", "source": "" }
+  ],
+  "steps": [
+    { "title": "Decide: OAuth app or GitHub App", "detail": "If you need fine-grained repo access or actions without a signed-in user, create a GitHub App instead. For simple 'act as the user' access, an OAuth app is fine.", "owner": "developer", "source": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app" },
+    { "title": "Open Settings > Developer settings > OAuth apps > New OAuth App", "detail": "Click your profile picture, then Settings, then Developer settings in the sidebar.", "owner": "developer", "source": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app" },
+    { "title": "Fill in name, homepage URL, callback URL", "detail": "Use only information you consider public. The callback URL must be your integration's redirect endpoint.", "owner": "both", "source": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app" },
+    { "title": "Choose token expiry and Device Flow, then Register application", "detail": "Leave token expiry enabled unless your integration cannot handle refresh tokens yet.", "owner": "developer", "source": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app" },
+    { "title": "Store the client ID and secret in your secrets manager", "detail": "Never commit them. Configure them in the integration that will run the OAuth flow.", "owner": "both", "source": "" }
+  ],
+  "blockers": [
+    { "issue": "Users in an organization cannot authorize your app", "fix": "Organizations can restrict third-party OAuth apps; an org owner must approve the app. (Unconfirmed in docs checked here; verify in the org's third-party access settings.)" },
+    { "issue": "Callback URL mismatch errors", "fix": "The redirect URI sent in the authorize request must match a registered callback URL. Register every environment (local, staging, prod), up to 10." }
+  ],
+  "agentCan": ["Draft the registration values (name, homepage, callback URLs) and the scope list.", "Wire the client ID/secret into your integration config and test the flow once credentials exist."],
+  "developerMust": ["Be signed in to GitHub (2FA applies) and submit the registration form.", "Own the decision between OAuth app and GitHub App."],
+  "uncertain": ["Client secret handling is not stated on the fetched page.", "Org third-party restriction behaviour was not verified against a real org."],
+  "sources": [
+    { "title": "Creating an OAuth app - GitHub Docs", "url": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app" }
+  ],
+  "meta": { "generatedBy": "curated", "researchedOn": "2026-10-27", "tested": "Read the primary docs page. No app was registered." }
+}

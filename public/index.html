@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>OAuth App Guides</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<main>
+  <h1>OAuth app guides</h1>
+  <p class="lead">Before your users can connect an app, you may need to register an OAuth app and get it approved. See how hard it is, how long it takes, and what to do next.</p>
+
+  <form id="gen">
+    <input type="text" id="q" placeholder="App name or website, e.g. Zoom or https://asana.com" maxlength="200" required aria-label="App name or website">
+    <button id="go" type="submit">Generate guide</button>
+  </form>
+  <p class="hint">Not in the library? An agent researches the provider's public docs and builds a guide on the fly. This can take a minute or two.</p>
+  <div id="status" class="status" role="status"></div>
+
+  <h2>Library</h2>
+  <div id="grid" class="grid"></div>
+</main>
+<script type="module">
+  import { el, badge, encodeGuide } from '/common.js';
+
+  const grid = document.getElementById('grid');
+  const status = document.getElementById('status');
+  const form = document.getElementById('gen');
+  const go = document.getElementById('go');
+
+  const show = (msg, isError = false) => {
+    status.textContent = msg;
+    status.className = 'status' + (isError ? ' error' : '');
+    status.style.display = msg ? 'block' : 'none';
+  };
+
+  const list = await (await fetch('/api/guides')).json();
+  for (const g of list.guides) {
+    grid.append(el('a', { class: 'card', href: `/guide?slug=${encodeURIComponent(g.slug)}` },
+      el('h3', { text: g.name }), badge(g.difficulty),
+      el('p', { text: `Wait: ${g.time.wait}` }),
+      el('p', { text: g.summary.slice(0, 140) + (g.summary.length > 140 ? '...' : '') })));
+  }
+  if (list.mode === 'stub') {
+    show('Live research is off on this server (no API key). Generated guides will be clearly marked as unresearched stubs.');
+  }
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    go.disabled = true;
+    show('Agent is researching the provider docs...');
+    try {
+      const res = await fetch('/api/generate', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ query: document.getElementById('q').value }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Request failed');
+      location.href = data.source === 'library'
+        ? `/guide?slug=${encodeURIComponent(data.guide.slug)}`
+        : `/guide#g=${encodeGuide(data.guide)}`;
+    } catch (err) {
+      show(err.message, true);
+      go.disabled = false;
+    }
+  });
+</script>
+</body>
+</html>

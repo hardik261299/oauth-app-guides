@@ -1,0 +1,45 @@
+{
+  "slug": "google",
+  "name": "Google (Workspace & Cloud APIs)",
+  "website": "https://console.cloud.google.com",
+  "summary": "A Google OAuth client is easy to create, but any app that requests sensitive or restricted scopes must pass Google's OAuth app verification before general use. Restricted scopes (such as full Gmail or Drive access) also need an annual third-party security assessment. This is the longest path of the apps shown here.",
+  "difficulty": "hard",
+  "difficultyWhy": "Verification needs a verified domain, privacy policy, scope justification and a demo video. Restricted scopes add an annual security assessment and re-verification.",
+  "time": { "handsOn": "~1 hour to create the client; days of work to prepare verification", "wait": "Not published on the pages checked; commonly reported as weeks for sensitive scopes and longer with a security assessment", "waitConfidence": "unconfirmed" },
+  "approval": {
+    "required": "yes",
+    "details": "Required for sensitive and restricted scopes. Not mandatory for non-sensitive scopes only, though brand verification is needed to show your app name and logo on the consent screen."
+  },
+  "requirements": [
+    { "text": "Apps requesting sensitive or restricted scopes must complete OAuth app verification before being granted access. Cloud Console labels each scope non-sensitive, sensitive or restricted.", "confidence": "confirmed", "source": "https://support.google.com/cloud/answer/13463073" },
+    { "text": "Brand verification (for app name/logo on the consent screen): homepage hosted on a verified domain you own, privacy policy linked from the homepage and consent screen, homepage not just a login page.", "confidence": "confirmed", "source": "https://support.google.com/cloud/answer/13464321" },
+    { "text": "Authorized domains must be verified through Google Search Console by an owner or editor.", "confidence": "confirmed", "source": "https://support.google.com/cloud/answer/13464321" },
+    { "text": "Request only the narrowest scopes needed, with a detailed justification.", "confidence": "confirmed", "source": "https://support.google.com/cloud/answer/13464321" },
+    { "text": "Sensitive/restricted scopes need a demo video showing the end-to-end flow including the OAuth grant.", "confidence": "confirmed", "source": "https://support.google.com/cloud/answer/13464321" },
+    { "text": "Restricted scopes require an annual security assessment by a Google-empanelled assessor, and annual re-verification.", "confidence": "confirmed", "source": "https://support.google.com/cloud/answer/13464321" },
+    { "text": "Unverified apps are capped at 100 users and show an 'unverified app' warning screen.", "confidence": "unconfirmed", "source": "" },
+    { "text": "In Testing publishing status, refresh tokens expire after 7 days.", "confidence": "unconfirmed", "source": "" }
+  ],
+  "steps": [
+    { "title": "Create a Google Cloud project and enable the APIs you need", "detail": "Use a project owned by the company, not a personal account.", "owner": "developer", "source": "" },
+    { "title": "Configure the OAuth consent screen and create an OAuth client", "detail": "Add redirect URIs and the narrowest scopes. Note each scope's sensitivity label.", "owner": "both", "source": "https://support.google.com/cloud/answer/13463073" },
+    { "title": "Verify your domain in Search Console", "detail": "Required before brand or app verification.", "owner": "developer", "source": "https://support.google.com/cloud/answer/13464321" },
+    { "title": "Publish a homepage and privacy policy", "detail": "Homepage must not be only a login page. Link the privacy policy from the homepage and the consent screen.", "owner": "developer", "source": "https://support.google.com/cloud/answer/13464321" },
+    { "title": "Record the demo video and write scope justifications", "detail": "Show the full OAuth grant and how each scope is used.", "owner": "both", "source": "https://support.google.com/cloud/answer/13464321" },
+    { "title": "Submit for verification and respond to reviewer email", "detail": "Reviewer questions arrive by email and need prompt replies.", "owner": "developer", "source": "" },
+    { "title": "Restricted scopes: complete the security assessment", "detail": "Engage an empanelled assessor; budget time and cost.", "owner": "developer", "source": "https://support.google.com/cloud/answer/13464321" }
+  ],
+  "blockers": [
+    { "issue": "Scopes classified as restricted (e.g. full mailbox or Drive)", "fix": "Check whether a narrower scope or a different API meets the need before committing to the security assessment." },
+    { "issue": "Domain cannot be verified or homepage is rejected", "fix": "Use a domain you control, a real homepage with the app description and a visible privacy policy link." },
+    { "issue": "Re-verification triggered by changes", "fix": "Certain changes to a verified app can require re-verification before users see them; batch changes." }
+  ],
+  "agentCan": ["Audit the requested scopes against sensitivity labels and suggest narrower alternatives.", "Draft the scope justification text, privacy policy skeleton and demo-video script."],
+  "developerMust": ["Prove domain ownership and own the Cloud project.", "Record the demo video, submit verification and answer reviewer emails.", "Pay for and complete a security assessment if restricted scopes are required."],
+  "uncertain": ["Review turnaround time was not on the pages fetched.", "The 100-user cap and 7-day testing refresh-token expiry are from general knowledge and were not found on the fetched pages.", "Security assessment cost is not published on the pages checked."],
+  "sources": [
+    { "title": "OAuth app verification - Google Cloud Help", "url": "https://support.google.com/cloud/answer/13463073" },
+    { "title": "Verification requirements - Google Cloud Help", "url": "https://support.google.com/cloud/answer/13464321" }
+  ],
+  "meta": { "generatedBy": "curated", "researchedOn": "2026-10-27", "tested": "Read two primary help pages. No project or consent screen was created." }
+}

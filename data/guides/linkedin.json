@@ -1,0 +1,42 @@
+{
+  "slug": "linkedin",
+  "name": "LinkedIn",
+  "website": "https://www.linkedin.com/developers/",
+  "summary": "Sign-in and basic posting are self-serve, but most other LinkedIn permissions are gated behind product or partner approval. What you can build is decided by which products LinkedIn grants your app, so scope the use case before you start.",
+  "difficulty": "hard",
+  "difficultyWhy": "Only a small set of 'open' permissions is self-serve. Marketing, Sales, Talent and similar capabilities require explicit approval or partner programs, and Compliance access is closed.",
+  "time": { "handsOn": "~30 minutes for open permissions", "wait": "None for open permissions; not published for approval-gated products", "waitConfidence": "unconfirmed" },
+  "approval": {
+    "required": "sometimes",
+    "details": "Open permissions (Sign in with LinkedIn using OpenID Connect; Share on LinkedIn) can be added self-service from the Products tab. Most other permissions and partner programs need explicit approval."
+  },
+  "requirements": [
+    { "text": "Open permissions: profile and email (via Sign in with LinkedIn using OpenID Connect) and w_member_social (via Share on LinkedIn), added self-service on the app's Products tab.", "confidence": "confirmed", "source": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/getting-access" },
+    { "text": "Most other permissions and partner programs require explicit approval from LinkedIn. Advertising API must be approved; Sales Navigator permissions require SNAP partner approval; Talent integrations need a partner application; Compliance permissions are closed and cannot be requested.", "confidence": "confirmed", "source": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/getting-access" },
+    { "text": "Redirect URLs must be absolute HTTPS URLs, cannot contain '#', and query parameters are ignored.", "confidence": "confirmed", "source": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/authorization-code-flow" },
+    { "text": "Authorization code lifespan is 30 minutes. Access tokens last 60 days. Programmatic refresh tokens are available only to a limited set of partners.", "confidence": "confirmed", "source": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/authorization-code-flow" },
+    { "text": "If scopes change, users must re-authenticate; requesting a different scope than previously granted invalidates previous access tokens.", "confidence": "confirmed", "source": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/authorization-code-flow" },
+    { "text": "Creating an app requires associating it with a LinkedIn Company Page, verified by a page admin.", "confidence": "unconfirmed", "source": "" }
+  ],
+  "steps": [
+    { "title": "Write down the exact capability you need", "detail": "Map it to an open permission or to an approval-gated product before building anything.", "owner": "both", "source": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/getting-access" },
+    { "title": "Create the app in the LinkedIn Developer Portal", "detail": "Requires a LinkedIn login. Company Page association is likely required (unconfirmed).", "owner": "developer", "source": "https://www.linkedin.com/developers/apps" },
+    { "title": "Add products on the Products tab", "detail": "Open products enable immediately. Approval-gated products start an application.", "owner": "developer", "source": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/getting-access" },
+    { "title": "Add HTTPS redirect URLs under the Auth tab and note client ID/secret", "detail": "Follow the absolute-URL and no-fragment rules.", "owner": "both", "source": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/authorization-code-flow" },
+    { "title": "Implement the 3-legged flow with state checking", "detail": "Exchange the code within 30 minutes; plan for 60-day token expiry and re-authorization.", "owner": "agent", "source": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/authorization-code-flow" }
+  ],
+  "blockers": [
+    { "issue": "Needed scope is not available to your app (Invalid scope 401)", "fix": "The scope must be assigned to the app via a Product or program. Check the Auth tab for current scopes and apply for the relevant Product." },
+    { "issue": "Redirect_uri doesn't match (401)", "fix": "Make the redirect URI in the request exactly match one registered under the Auth tab." },
+    { "issue": "Users must re-login every 60 days", "fix": "Refresh tokens are limited to partners; build a re-authorization prompt into the UX." },
+    { "issue": "Use case falls under Compliance or a partner-only program", "fix": "Compliance is closed. For Sales/Talent/Marketing, apply to the matching partner program early." }
+  ],
+  "agentCan": ["Map your use case to open vs gated permissions and warn you early.", "Implement the OAuth flow, state validation and expiry-aware re-auth prompts."],
+  "developerMust": ["Create the app with a LinkedIn identity and any company association.", "Submit and follow up on partner/product applications."],
+  "uncertain": ["Approval timelines for gated products are not stated on the pages fetched.", "Company Page association requirement is from general knowledge.", "The auth-flow page sample still shows legacy 'liteprofile' scope while the permission table lists profile/email via OpenID Connect; prefer the permission table and test."],
+  "sources": [
+    { "title": "Getting Access to LinkedIn APIs", "url": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/getting-access" },
+    { "title": "LinkedIn 3-Legged OAuth Flow", "url": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/authorization-code-flow" }
+  ],
+  "meta": { "generatedBy": "curated", "researchedOn": "2026-10-27", "tested": "Read two primary docs pages. No app was created." }
+}

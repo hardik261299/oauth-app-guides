@@ -1,0 +1,12 @@
+{
+  "name": "oauth-app-guides",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Actionable guides for creating and getting approval for provider OAuth apps, with live agent-generated guides for unfamiliar apps.",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test"
+  },
+  "engines": { "node": ">=20" }
+}

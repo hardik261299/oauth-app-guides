@@ -1,0 +1,42 @@
+{
+  "slug": "slack",
+  "name": "Slack",
+  "website": "https://slack.com",
+  "summary": "Creating a Slack app and running the v2 OAuth flow is self-serve and documented. Getting scopes approved for apps published to other workspaces involves Slack's review; the docs checked here do not state how long that takes.",
+  "difficulty": "moderate",
+  "difficultyWhy": "Setup is simple, but redirect URL rules, additive scopes and the review path for published apps add real surface area.",
+  "time": { "handsOn": "~1 hour", "wait": "Not published in the docs checked", "waitConfidence": "unconfirmed" },
+  "approval": {
+    "required": "sometimes",
+    "details": "Installing to your own workspace needs no review. The docs mention an unapproved_scope error when scopes are still in review or were never submitted for review, which implies a review path for published apps. The full process was not described on the fetched page."
+  },
+  "requirements": [
+    { "text": "Redirect URLs must use HTTPS and cannot contain an anchor; configure them under OAuth & Permissions.", "confidence": "confirmed", "source": "https://docs.slack.dev/authentication/installing-with-oauth" },
+    { "text": "A redirect_uri must match or be a subdirectory of a configured URL. With multiple URLs configured, send the same redirect_uri in both the authorize and access steps or you get bad_redirect_uri.", "confidence": "confirmed", "source": "https://docs.slack.dev/authentication/installing-with-oauth" },
+    { "text": "Use 'scope' for bot scopes and 'user_scope' for user scopes. Sign in with Slack user scopes must go in a separate flow.", "confidence": "confirmed", "source": "https://docs.slack.dev/authentication/installing-with-oauth" },
+    { "text": "The temporary code expires after ten minutes; verify 'state' on return.", "confidence": "confirmed", "source": "https://docs.slack.dev/authentication/installing-with-oauth" },
+    { "text": "Scopes are additive on reinstall and cannot be removed without revoking the token.", "confidence": "confirmed", "source": "https://docs.slack.dev/authentication/installing-with-oauth" },
+    { "text": "Tokens do not expire on their own unless token rotation is enabled (available to apps with granular permissions).", "confidence": "confirmed", "source": "https://docs.slack.dev/authentication/installing-with-oauth" },
+    { "text": "Distributing to other workspaces requires enabling public distribution in the app settings.", "confidence": "unconfirmed", "source": "" }
+  ],
+  "steps": [
+    { "title": "Create the app in Slack's app management console", "detail": "Create a new app (from scratch or manifest) under the workspace you will use for development.", "owner": "developer", "source": "" },
+    { "title": "Add redirect URLs", "detail": "OAuth & Permissions > Redirect URLs. HTTPS only. Add every environment.", "owner": "both", "source": "https://docs.slack.dev/authentication/installing-with-oauth" },
+    { "title": "Pick the minimum bot and user scopes", "detail": "Mark nice-to-have scopes as optional so users can decline them, and handle missing_scope errors.", "owner": "both", "source": "https://docs.slack.dev/authentication/installing-with-oauth" },
+    { "title": "Send users to https://slack.com/oauth/v2/authorize", "detail": "Include client_id, scope/user_scope, redirect_uri and a random state.", "owner": "agent", "source": "https://docs.slack.dev/authentication/installing-with-oauth" },
+    { "title": "Exchange the code with oauth.v2.access", "detail": "Do this within ten minutes. Store tokens per workspace.", "owner": "agent", "source": "https://docs.slack.dev/authentication/installing-with-oauth" },
+    { "title": "If publishing broadly, submit scopes/app for review", "detail": "Plan for an unknown wait. Check the current Marketplace guidelines directly with Slack.", "owner": "developer", "source": "" }
+  ],
+  "blockers": [
+    { "issue": "bad_redirect_uri", "fix": "Send the identical redirect_uri in both the authorize and oauth.v2.access calls when more than one URL is configured." },
+    { "issue": "unapproved_scope for a published app", "fix": "A requested scope is still in review or was never submitted. Submit it for review or remove it from the request." },
+    { "issue": "missing_scope after user declines an optional scope", "fix": "Handle gracefully and re-prompt only when the feature is used." }
+  ],
+  "agentCan": ["Generate the authorize URL and token exchange code.", "Implement state checking and per-workspace token storage."],
+  "developerMust": ["Create the app while signed in to Slack and pick the workspace.", "Own any Marketplace/scope review submission and correspondence."],
+  "uncertain": ["Marketplace/scope review duration and requirements: the Marketplace review guide URL I tried returned 404, so this was not verified.", "Public distribution toggle and app creation steps come from general knowledge, not the fetched page."],
+  "sources": [
+    { "title": "Installing with OAuth - Slack docs", "url": "https://docs.slack.dev/authentication/installing-with-oauth" }
+  ],
+  "meta": { "generatedBy": "curated", "researchedOn": "2026-10-27", "tested": "Read the primary docs page. The old api.slack.com URL redirects (302) to docs.slack.dev. No app was created." }
+}
