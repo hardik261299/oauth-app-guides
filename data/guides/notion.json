@@ -5,7 +5,7 @@
   "summary": "Notion's OAuth uses a 'public connection' created in the developer portal. Its authorization URL only appears after the connection is submitted for review, so you cannot start the user flow until you pass that step. Each end user must authorize individually.",
   "difficulty": "moderate",
   "difficultyWhy": "The form is simple, but the authorization URL is gated on a review submission whose timing is not documented on the page checked. Installation scope is permanent.",
-  "time": { "handsOn": "~30-60 minutes", "wait": "Not published on the page checked", "waitConfidence": "unconfirmed" },
+  "time": { "handsOn": "Estimate: ~30-60 minutes", "wait": "Not published on the page checked", "waitConfidence": "unconfirmed" },
   "approval": {
     "required": "yes",
     "details": "The Authorization URL field populates only after the connection is submitted for review. Marketplace listing details are managed separately under Listings."

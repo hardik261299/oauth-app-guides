@@ -5,7 +5,7 @@
   "summary": "Creating a Slack app and running the v2 OAuth flow is self-serve and documented. Getting scopes approved for apps published to other workspaces involves Slack's review; the docs checked here do not state how long that takes.",
   "difficulty": "moderate",
   "difficultyWhy": "Setup is simple, but redirect URL rules, additive scopes and the review path for published apps add real surface area.",
-  "time": { "handsOn": "~1 hour", "wait": "None for unlisted distribution; Marketplace review time is not published", "waitConfidence": "confirmed" },
+  "time": { "handsOn": "Estimate: ~1 hour", "wait": "None for unlisted distribution; Marketplace review time is not published", "waitConfidence": "confirmed" },
   "approval": {
     "required": "sometimes",
     "details": "Installing to your own workspace needs no review. The docs mention an unapproved_scope error when scopes are still in review or were never submitted for review, which implies a review path for published apps. The full process was not described on the fetched page."

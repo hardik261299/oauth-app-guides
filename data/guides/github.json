@@ -5,7 +5,7 @@
   "summary": "Registering a GitHub OAuth app is a form on your account settings and takes minutes. The docs list no review step. The real decision is whether to use an OAuth app or a GitHub App, which GitHub's docs recommend considering first.",
   "difficulty": "easy",
   "difficultyWhy": "Self-serve form, no documented review. The only complexity is choosing between an OAuth app and a GitHub App, and organization access policies.",
-  "time": { "handsOn": "~10 minutes", "wait": "None documented", "waitConfidence": "confirmed" },
+  "time": { "handsOn": "Estimate: ~10 minutes", "wait": "None documented", "waitConfidence": "confirmed" },
   "approval": {
     "required": "no",
     "details": "The registration page does not mention any review or approval process. Organizations may still restrict third-party OAuth apps (see blockers; unconfirmed)."

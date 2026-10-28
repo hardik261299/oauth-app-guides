@@ -5,7 +5,7 @@
   "summary": "Sign-in and basic posting are self-serve, but most other LinkedIn permissions are gated behind product or partner approval. What you can build is decided by which products LinkedIn grants your app, so scope the use case before you start.",
   "difficulty": "hard",
   "difficultyWhy": "Only a small set of 'open' permissions is self-serve. Marketing, Sales, Talent and similar capabilities require explicit approval or partner programs, and Compliance access is closed.",
-  "time": { "handsOn": "~30 minutes for open permissions", "wait": "None for open permissions; not published for approval-gated products", "waitConfidence": "unconfirmed" },
+  "time": { "handsOn": "Estimate: ~30 minutes for open permissions", "wait": "None for open permissions; not published for approval-gated products", "waitConfidence": "unconfirmed" },
   "approval": {
     "required": "sometimes",
     "details": "Open permissions (Sign in with LinkedIn using OpenID Connect; Share on LinkedIn) can be added self-service from the Products tab. Most other permissions and partner programs need explicit approval."

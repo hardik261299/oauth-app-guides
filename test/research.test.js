@@ -24,20 +24,60 @@ test('htmlToText strips scripts and tags', () => {
   assert.match(t, /A & B/);
 });
 
-test('enforceEvidence downgrades confirmed claims whose source was not fetched', () => {
+const PAGE = { url: 'https://docs.x.com/a', title: 'A', text: "You must be the account owner. Refresh tokens expire after 90 days. Use the app's redirect URL." };
+
+test('enforceEvidence keeps a claim only if its quote is in the fetched page text', () => {
   const g = normalizeGuide({
     name: 'X',
-    time: { wait: '2 weeks', waitConfidence: 'confirmed' },
+    time: { handsOn: '~30 min', wait: '2 weeks', waitConfidence: 'confirmed' },
     requirements: [
-      { text: 'real', confidence: 'confirmed', source: 'https://docs.x.com/a' },
-      { text: 'invented source', confidence: 'confirmed', source: 'https://made-up.example/z' },
+      { text: 'real', confidence: 'confirmed', source: PAGE.url, quote: 'Refresh tokens expire after 90 days.' },
+      { text: 'punctuation/case tolerant', confidence: 'confirmed', source: PAGE.url, quote: "use the APP'S redirect url" },
+      { text: 'real page, invented claim', confidence: 'confirmed', source: PAGE.url, quote: 'Tokens never expire at all.' },
+      { text: 'no quote', confidence: 'confirmed', source: PAGE.url },
+      { text: 'quote too short', confidence: 'confirmed', source: PAGE.url, quote: 'the account' },
+      { text: 'invented source', confidence: 'confirmed', source: 'https://made-up.example/z', quote: 'Refresh tokens expire after 90 days.' },
     ],
     steps: [{ title: 's', source: 'https://made-up.example/z' }],
   });
-  enforceEvidence(g, [{ url: 'https://docs.x.com/a', title: 'A' }]);
-  assert.equal(g.requirements[0].confidence, 'confirmed');
-  assert.equal(g.requirements[1].confidence, 'unconfirmed');
-  assert.equal(g.requirements[1].source, '');
+  enforceEvidence(g, [PAGE]);
+  assert.deepEqual(g.requirements.map(r => r.confidence),
+    ['confirmed', 'confirmed', 'unconfirmed', 'unconfirmed', 'unconfirmed', 'unconfirmed']);
+  assert.equal(g.requirements[2].source, '');
+  assert.equal(g.requirements[2].quote, '');
   assert.equal(g.steps[0].source, '');
-  assert.deepEqual(g.sources, [{ title: 'A', url: 'https://docs.x.com/a' }]);
+  assert.deepEqual(g.sources, [{ title: 'A', url: PAGE.url }]);
+  assert.match(g.meta.evidenceNote, /4 claim/);
+});
+
+test('enforceEvidence labels hands-on time as an estimate once', () => {
+  const g = normalizeGuide({ name: 'X', time: { handsOn: '~30 min' } });
+  enforceEvidence(g, [PAGE]);
+  assert.equal(g.time.handsOn, 'Estimate: ~30 min');
+  enforceEvidence(g, [PAGE]);
+  assert.equal(g.time.handsOn, 'Estimate: ~30 min');
+});
+
+test('enforceEvidence downgrades console-click steps from agent to both, keeps code steps', () => {
+  const g = normalizeGuide({
+    name: 'X',
+    steps: [
+      { title: 'Test Locally', detail: 'Navigate to the Local Test page, select Add App Now and Allow.', owner: 'agent' },
+      { title: 'Build token exchange', detail: 'Implement the code-for-token POST and store the refresh token.', owner: 'agent' },
+      { title: 'Create app', detail: 'Click Create.', owner: 'developer' },
+    ],
+  });
+  enforceEvidence(g, [PAGE]);
+  assert.deepEqual(g.steps.map(s => s.owner), ['both', 'agent', 'developer']);
+});
+
+test('requirement appliesTo defaults to always and rejects junk', () => {
+  const g = normalizeGuide({ name: 'X', requirements: [
+    { text: 'a', appliesTo: 'publishing' }, { text: 'b' }, { text: 'c', appliesTo: 'whenever' },
+  ] });
+  assert.deepEqual(g.requirements.map(r => r.appliesTo), ['publishing', 'always', 'always']);
+});
+
+test('htmlToText decodes numeric and hex entities so quotes can match', () => {
+  assert.match(htmlToText("<p>the app&#x27;s URL &#8211; ok &#39;x&#39;</p>"), /the app's URL . ok 'x'/);
 });

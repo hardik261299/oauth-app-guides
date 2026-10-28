@@ -5,7 +5,7 @@
   "summary": "A Google OAuth client is easy to create, but any app that requests sensitive or restricted scopes must pass Google's OAuth app verification before general use. Restricted scopes (such as full Gmail or Drive access) also need an annual third-party security assessment. This is the longest path of the apps shown here.",
   "difficulty": "hard",
   "difficultyWhy": "Verification needs a verified domain, privacy policy, scope justification and a demo video. Restricted scopes add an annual security assessment and re-verification.",
-  "time": { "handsOn": "~1 hour to create the client; days of work to prepare verification", "wait": "Not published on the pages checked; commonly reported as weeks for sensitive scopes and longer with a security assessment", "waitConfidence": "unconfirmed" },
+  "time": { "handsOn": "Estimate: ~1 hour to create the client; days of work to prepare verification", "wait": "Not published on the pages checked; commonly reported as weeks for sensitive scopes and longer with a security assessment", "waitConfidence": "unconfirmed" },
   "approval": {
     "required": "yes",
     "details": "Required for sensitive and restricted scopes. Not mandatory for non-sensitive scopes only, though brand verification is needed to show your app name and logo on the consent screen."
