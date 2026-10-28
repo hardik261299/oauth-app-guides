@@ -28,7 +28,7 @@ Items first written as "general knowledge" were looked up and the guides updated
 - **Slack Marketplace review guide could not be loaded** (guessed URL returned 404). Review requirements and timing are therefore listed as unverified rather than asserted.
 - **GitHub docs say nothing about review.** I wrote "no documented review", not "no review", and kept org-level third-party restrictions as unconfirmed. The same page recommends considering a GitHub App before an OAuth app, which became a decision step in the guide.
 - **LinkedIn docs are internally inconsistent.** The auth-flow page's sample requests use legacy `liteprofile`, while the permissions table lists `profile`/`email` via OpenID Connect. The guide follows the permissions table and flags the discrepancy.
-- **Google help pages do not state** the 100-user cap, verification turnaround or testing-mode token expiry, even though these are widely repeated. They stay `unconfirmed` and are labelled "general knowledge".
+- **The first Google help pages I read did not state** the 100-user cap or testing-mode token expiry, even though these are widely repeated, so they were first left `unconfirmed`. Other pages later confirmed both (see the second pass above); verification turnaround is still not published.
 - **Notion's authorization URL is gated on review submission.** This is the key nuance for planning: you cannot start the user flow until the connection is submitted. Review duration is not documented on the page read.
 
 ## Not verified at all

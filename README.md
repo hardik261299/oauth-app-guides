@@ -2,6 +2,8 @@
 
 A developer who wants their users to connect a third-party app often has to register an OAuth app with that provider first, and sometimes get it approved. This project answers four questions up front: **how hard is it, how long will it take, what could block me, and what can an agent do versus what do I have to do.**
 
+**Live demo: https://oauth-app-guides.vercel.app/** (source: https://github.com/hardik261299/oauth-app-guides)
+
 - **Library**: 5 curated guides chosen for different setup challenges (GitHub, Slack, Notion, Google, LinkedIn).
 - **Live generation**: type any app name or website and a research agent builds a guide from public sources, with a shareable link.
 
