@@ -49,7 +49,10 @@
   form.addEventListener('submit', async e => {
     e.preventDefault();
     go.disabled = true;
-    show('Agent is researching the provider docs...');
+    const started = Date.now();
+    const tick = () => show(`Researching official docs and writing the guide... ${Math.round((Date.now() - started) / 1000)}s elapsed. This usually takes 1-2 minutes; please keep this tab open.`);
+    tick();
+    const timer = setInterval(tick, 1000);
     try {
       const res = await fetch('/api/generate', {
         method: 'POST',
@@ -62,6 +65,7 @@
         ? `/guide?slug=${encodeURIComponent(data.guide.slug)}`
         : `/guide#g=${encodeGuide(data.guide)}`;
     } catch (err) {
+      clearInterval(timer);
       show(err.message, true);
       go.disabled = false;
     }
