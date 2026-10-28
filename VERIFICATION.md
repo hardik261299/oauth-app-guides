@@ -35,7 +35,7 @@ Items first written as "general knowledge" were looked up and the guides updated
 
 - Real approval durations for any provider (providers largely do not publish them).
 - Any behaviour that requires a signed-in console: exact UI labels, plan restrictions, fees.
-- The live agent path against the Gemini/Anthropic APIs (no key available during development). Parsing, normalization and the stub path are covered by tests.
+- The optional Anthropic path (never run). The Gemini path was run on one app (Zoom) only, and its output was not independently checked yet.
 
 ## Suggested next verification step
 

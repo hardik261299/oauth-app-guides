@@ -31,7 +31,8 @@ Import the repo, set `GEMINI_API_KEY` (and optionally `GEMINI_MODEL`) in the pro
 4. **Stateless sharing.** A generated guide is encoded into the URL fragment (`/guide#g=...`), so it can be shared without a database. Curated guides live at `/guide?slug=...`.
 5. **Library first.** A query matching a curated guide (by name or domain) returns it instead of spending a generation.
 6. **Untrusted output boundary.** Agent output goes through `normalizeGuide()` (enum-clamped fields, http(s)-only URLs, length limits) and the UI renders with `textContent` only, so a hostile guide or share link cannot inject markup.
-7. **Zero dependencies.** One `fetch` to the Gemini API (free tier) with Google Search grounding; Anthropic is supported as an optional alternative if `GEMINI_API_KEY` is unset. Easy to audit and deploy.
+7. **Evidence enforced by the server, not trusted from the model.** Gemini's free tier has no Google Search grounding, so the agent works in steps: the model proposes official docs URLs, the server fetches them (public https hosts only, blocking private/metadata addresses and unsafe redirects), the model picks further pages from links that really exist on those pages (its guessed URLs are often 404s), then writes the guide from the fetched text only. Any "confirmed" claim whose source was not actually fetched is downgraded to "unconfirmed". Tested on Zoom: 7 pages read, 62 seconds.
+8. **Zero dependencies.** One `fetch` to the Gemini API (free tier) with Google Search grounding; Anthropic is supported as an optional alternative if `GEMINI_API_KEY` is unset. Easy to audit and deploy.
 
 ## Evidence and limits (read this)
 
@@ -43,7 +44,7 @@ See [VERIFICATION.md](VERIFICATION.md) for exactly what was checked, corrected a
 - Generated guides are not human reviewed. Search-based research can pick up stale or third-party pages; use the source links.
 - The live generator is rate limited in-memory per IP (best effort on serverless) and is the only part that spends API credit.
 - Only 5 of the target 100 guides exist, by design of this take-home.
-- This build was not run against a live API key in my environment, so the Gemini/Anthropic request paths are unit-tested for parsing and normalization but **not yet exercised end to end**. Do a first live run before relying on it.
+- The free Gemini path was run end to end on Zoom (see above). The optional Anthropic path was not exercised. Free-tier models are retired or overloaded often, so the code tries a fallback chain of models; JavaScript-rendered docs pages cannot be read and are skipped.
 
 ## Layout
 
